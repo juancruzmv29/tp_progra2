@@ -5,22 +5,29 @@ import java.util.List;
 
 public class VueloPrivado extends Vuelo {
 	
-	
 	private double precioPorJet;
-	private Pasajero pasajeroComprador;
-	private List<Pasajero> pasajerosAcompañantes;
 	private int cantJets;
 	private double precioFijo;
+	private int dniComprador;
+	private int[] acompaniantes;
 	
-
-	public VueloPrivado(String aeropuertoSalida, String aeropuertoLlegada, String destino, Date horaSalida,
-			Date horaLlegada, int cantAsientos, int tripulantes, double precioXJet, int cantJets
-			, double precioFijo) {
-		super(aeropuertoSalida, aeropuertoLlegada, destino, horaSalida, horaLlegada, cantAsientos, tripulantes);
-		this.precioPorJet = precioXJet;
-		this.cantJets = cantJets;
-		this.precioFijo = precioFijo;
+	
+	
+	public VueloPrivado(String origen, String destino, String fecha, int tripulantes, int dniComprador, int[] acompaniantes) {
+		super(origen, destino, fecha, tripulantes);
+		this.dniComprador = dniComprador;
+		this.acompaniantes = acompaniantes;
 	}
+
+
+
+
+
+	@Override
+	public void aniadirPasajeroAlVuelo(Integer asiento, Cliente c) {
+		super.pasajerosVuelo.put(asiento, c);
+	}
+
 	
 	
 	@Override
@@ -28,5 +35,15 @@ public class VueloPrivado extends Vuelo {
 		// TODO Auto-generated method stub
 		return super.toString();
 	}
+
+
+
+
+
+
+
+
+
+	
 
 }

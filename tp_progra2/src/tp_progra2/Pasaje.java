@@ -1,23 +1,32 @@
 package tp_progra2;
 
+import java.util.HashMap;
+
 public class Pasaje {
 	
 	
-	private int codPasaje;
-	private String dniPasajero;
+	private static int codPasaje = 0;
+	private int dniPasajero;
 	private int codVuelo;
 	private int nroAsiento;
 	private Seccion seccion;
 	private String destino;
 	private double costoPasaje;
+	private boolean aOcupar;
+	private HashMap<Integer, Cliente> datosCliente;
 	
-	public Pasaje(String dniPasajero, Seccion seccion, int nroAsiento, String destino) {
+	public Pasaje(Integer dniPasajero, int codVuelo, int nroAsiento, boolean aOcupar) {
+		this.codPasaje += 1;
 		this.dniPasajero = dniPasajero;
-		this.seccion = seccion;
+		this.codVuelo = codVuelo;
 		this.nroAsiento = nroAsiento;
-		this.destino = destino;
+		this.aOcupar = aOcupar;
 	}
 	
+	public int obtenerCodigoPasaje() {
+		return this.codPasaje;
+	}
+ 	
 	public double obtenerCostoPasaje() {
 		return 0;
 	}

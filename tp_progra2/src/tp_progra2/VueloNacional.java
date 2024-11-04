@@ -3,15 +3,19 @@ package tp_progra2;
 import java.util.Date;
 
 public class VueloNacional extends Vuelo {
+	
+	private double valorRefrigerio;
+	private double[] precios;
+	public int[] cantAsientos;
+	
 
-	private int maxPasajerosPorSeccion;
-	
-	
-	public VueloNacional(String aeropuertoSalida, String aeropuertoLlegada, String destino, Date horaSalida,
-			Date horaLlegada, int cantAsientos, int tripulantes, int maxPasajerosPorSeccion) {
-		super(aeropuertoSalida, aeropuertoLlegada, destino, horaSalida, horaLlegada, cantAsientos, tripulantes);
-		this.maxPasajerosPorSeccion = maxPasajerosPorSeccion;
+	public VueloNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos) {
+		super(origen, destino, fecha, tripulantes);
+		this.valorRefrigerio = valorRefrigerio;
+		this.precios = precios;
+		this.cantAsientos = cantAsientos;
 	}
+	
 
 	
 	
@@ -19,5 +23,13 @@ public class VueloNacional extends Vuelo {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return super.toString();
+	}
+
+
+
+
+	@Override
+	public void aniadirPasajeroAlVuelo(Integer asiento, Cliente c) {
+		super.pasajerosVuelo.put(asiento, c);
 	}
 }
