@@ -3,6 +3,7 @@ package tp_progra2;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.text.*;
 import java.util.Date;
 
@@ -104,7 +105,7 @@ public class Aerolinea {
 			new RuntimeException("La aerolinea por ahora no opera en esta ubicación...");
 		}
 		
-		VueloPrivado vueloPrivado = new VueloPrivado(origen, destino, fecha, tripulantes, dniComprador, acompaniantes);
+		VueloPrivado vueloPrivado = new VueloPrivado(origen, destino, fecha, tripulantes, precio, dniComprador, acompaniantes);
 		String codVuelo = vueloPrivado.obtenerCodigoVueloPrivado();
 		
 		return codVuelo;
@@ -254,9 +255,18 @@ public class Aerolinea {
 		return lista;
 	}
 	
-	
+	// RECORRE LOS VUELOS DE AEROLINEA POR DESTINO Y DEVUELVE UN RECAUDO DE DINERO
 	public double totalRecaudado(String destino) {
-		return 0;
+		
+		double recaudado = 0;
+		
+		for(Entry<String, Vuelo> vuelos : vuelos.entrySet()) {
+			if(vuelos.getValue().obtenerDestino().equalsIgnoreCase(destino)) {
+				recaudado += vuelos.getValue().obtenerValorVuelo();
+			}
+		}
+		
+		return recaudado;
 	}
 	
 	
@@ -273,9 +283,6 @@ public class Aerolinea {
 		return vuelo;
 	}
 	
-	public String detalleVuelo(String codVuelo) {
-		return "";
-	}
 	
 	
 	

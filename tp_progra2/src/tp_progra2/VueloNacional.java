@@ -1,6 +1,7 @@
 package tp_progra2;
 
 import java.util.Date;
+import java.util.Map.Entry;
 
 public class VueloNacional extends Vuelo {
 	
@@ -12,11 +13,18 @@ public class VueloNacional extends Vuelo {
 	public VueloNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos) {
 		super(origen, destino, fecha, tripulantes);
 		this.valorRefrigerio = valorRefrigerio;
-		this.precios = precios;
-		this.cantAsientos = cantAsientos;
+		if(this.precios.length <= 1) {
+			this.cantAsientos = cantAsientos;
+		} else {
+			new RuntimeException("Solo se pueden añadir dos precios");
+		}
+		if(this.cantAsientos.length <= 1) {
+			this.cantAsientos = cantAsientos;
+		} else {
+			new RuntimeException("Solo se pueden añadir dos secciones");
+		}
+		
 	}
-	
-
 	
 	
 	@Override
@@ -35,25 +43,31 @@ public class VueloNacional extends Vuelo {
 
 
 
-	/*
-
-	@Override
-	public String obtenerClase(int nroAsiento) {
-		String clase = "";
-		for(Integer nroAsiento1 : cantAsientos) {
-			if(nroAsiento > this.cantAsientos[0]) {
-				clase = "Ejecutiva";
-			} else if(nroAsiento > this.cantAsientos[1]) {
-				clase = "Primera clase";
-			} else {
-				clase = "Turista";
-			}
-		}
-		return clase;
-	}*/
-
 
 	public String obtenerCodigoVueloPublico() {
 		return this.obtenerCodigoVuelo() + "-PUB";
 	}
+
+
+
+
+	@Override
+	public double obtenerValorVuelo() {
+		double monto = 0;
+		for(Entry<Integer, Cliente> pasajeros : this.pasajerosVuelo.entrySet()) {
+			if(pasajeros.getKey() > cantAsientos[0] && pasajeros.getValue() != null) {
+				// se calcula el precio de cada pasaje + el 20% de impuestos
+				monto += precios[1] + (precios[1] * 20 / 100);
+			} else if(pasajeros.getKey() < cantAsientos[1] && pasajeros.getValue() != null) {
+				monto += precios[0] + (precios[0] * 20 / 100) ;
+			}
+		}
+		
+		return monto + valorRefrigerio;
+	}
+
+
+
+
+	
 }

@@ -12,8 +12,8 @@ public abstract class Vuelo {
 	private String destino;
 	private String fecha;
 	private int tripulantes;
-	private double valorImpuestos;
 	public HashMap<Integer, Cliente> pasajerosVuelo; // nroAsiento, Cliente
+	public HashMap<Integer, Pasaje> pasajesVuelo;
 	
 	
 	public Vuelo(String origen, String destino, String fecha, int tripulantes) {
@@ -24,17 +24,14 @@ public abstract class Vuelo {
 		this.tripulantes = tripulantes;
 		this.pasajerosVuelo = new HashMap<Integer, Cliente>();
 	}
-
-	// recorre el costo de todos los pasajes de registroPasajeros
-	public double obtenerCostoVuelo() {
-		return 0;
-	}
+	
 	
 	// cancela pasaje de un pasajero, va a sacar el pasajero de registroPasajeros y se va a comunicar con la clase Pasaje
 	public void cancelarPasaje(int dniPasajero, int nroAsiento) {
 		if(estaPasajero(dniPasajero)) {
 			if(pasajerosVuelo.containsKey(nroAsiento)) {
 				pasajerosVuelo.put(null, null);
+				pasajesVuelo.put(null, null);
 			}
 		}
 	}
@@ -77,16 +74,14 @@ public abstract class Vuelo {
 		return this.codVuelo;
 	}
 	
-	// va a reprogramar los pasajes del vuelo completo
-	public void reprogramarPasajes() {
-		
-	}
+	
+	
+	public abstract double obtenerValorVuelo();
 
-	@Override
-	public String toString() {
+	public String detalleVuelo() {
 		return "Vuelo codVuelo: " + codVuelo + ", origen: " + origen + " destino: " + destino + " fecha: " + fecha
-				+ " tripulantes: " + tripulantes + " valorImpuestos: " + valorImpuestos + " registroPasajeros:"
-				+ pasajerosVuelo;
+				+ " tripulantes: " + tripulantes + " valorImpuestos: " + " registroPasajeros:"
+				+ pasajerosVuelo.toString();
 	}
 	
  	

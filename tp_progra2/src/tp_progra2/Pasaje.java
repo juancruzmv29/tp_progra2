@@ -9,9 +9,7 @@ public class Pasaje {
 	private int dniPasajero;
 	private String codVuelo;
 	private int nroAsiento;
-	private Seccion seccion;
 	private String destino;
-	private double costoPasaje;
 	private boolean aOcupar;
 	private HashMap<Integer, Cliente> datosCliente;
 	
