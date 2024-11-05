@@ -3,6 +3,7 @@ package tp_progra2;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Vuelo {
 	
@@ -21,6 +22,7 @@ public abstract class Vuelo {
 		this.destino = destino;
 		this.fecha = fecha;
 		this.tripulantes = tripulantes;
+		this.pasajerosVuelo = new HashMap<Integer, Cliente>();
 	}
 
 	// recorre el costo de todos los pasajes de registroPasajeros
@@ -29,8 +31,22 @@ public abstract class Vuelo {
 	}
 	
 	// cancela pasaje de un pasajero, va a sacar el pasajero de registroPasajeros y se va a comunicar con la clase Pasaje
-	public void cancelarPasaje(String dniPasajero, int nroAsiento) {
-		
+	public void cancelarPasaje(int dniPasajero, int nroAsiento) {
+		if(estaPasajero(dniPasajero)) {
+			if(pasajerosVuelo.containsKey(nroAsiento)) {
+				pasajerosVuelo.put(null, null);
+			}
+		}
+	}
+	
+	// verifica que esté un pasajero en el vuelo
+	private boolean estaPasajero(int dni) {
+		for(Map.Entry<Integer, Cliente> pasajero : pasajerosVuelo.entrySet()) {
+			if(!pasajero.getValue().estaDni(dni)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	// para agregar paajero y el numero de asiento
@@ -42,6 +58,18 @@ public abstract class Vuelo {
 			return false;
 		}
 		return true;
+	}
+	
+	public String obtenerFecha() {
+		return this.fecha;
+	}
+	
+	public String obtenerOrigen() {
+		return this.origen;
+	}
+	
+	public String obtenerDestino() {
+		return this.destino;
 	}
 	
 	public int obtenerCodigoVuelo() {

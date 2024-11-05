@@ -7,7 +7,7 @@ public class Pasaje {
 	
 	private static int codPasaje = 0;
 	private int dniPasajero;
-	private int codVuelo;
+	private String codVuelo;
 	private int nroAsiento;
 	private Seccion seccion;
 	private String destino;
@@ -15,7 +15,7 @@ public class Pasaje {
 	private boolean aOcupar;
 	private HashMap<Integer, Cliente> datosCliente;
 	
-	public Pasaje(Integer dniPasajero, int codVuelo, int nroAsiento, boolean aOcupar) {
+	public Pasaje(Integer dniPasajero, String codVuelo, int nroAsiento, boolean aOcupar) {
 		this.codPasaje += 1;
 		this.dniPasajero = dniPasajero;
 		this.codVuelo = codVuelo;

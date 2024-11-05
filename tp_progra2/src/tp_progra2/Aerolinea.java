@@ -13,6 +13,7 @@ public class Aerolinea {
 	private HashMap<Integer, Cliente> clientes; // dni y objeto cliente
 	private HashMap<Integer, Vuelo> vuelos; // codVuelo y objeto vuelo
 	private HashMap<String, Aeropuerto> aeropuertos; // provincia, aeropuerto
+	private StringBuilder sb;
 	
 	
 	public Aerolinea(String nombre, String cuit) {
@@ -57,7 +58,7 @@ public class Aerolinea {
 		
 		
 		VueloNacional vueloNacional = new VueloNacional(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
-		Integer codVuelo = vueloNacional.obtenerCodigoVuelo();
+		int codVuelo = vueloNacional.obtenerCodigoVuelo();
 		
 		vuelos.put(codVuelo, vueloNacional);
 		
@@ -110,7 +111,7 @@ public class Aerolinea {
 	}
 	
 	// ASIENTOS DISPONIBLES DE UN VUELO
-	public Map<Integer, String> asientosDisponibles(int codVuelo) {
+	public Map<Integer, String> asientosDisponibles(String codVuelo) {
 		Vuelo vuelo = buscarVuelo(codVuelo);
 		Map<Integer, String> asientosDisponibles = new HashMap<>();
 		String clase = null;
@@ -161,7 +162,7 @@ public class Aerolinea {
 	}
 	
 	// VENTA DE PASAJE
-	public int venderPasaje(int dni, int codVuelo, int nroAsiento, boolean aOcupar) {
+	public int venderPasaje(int dni, String codVuelo, int nroAsiento, boolean aOcupar) {
 		Cliente cliente = null;
 		
 		if(!clientes.containsKey(dni)) {
@@ -211,17 +212,46 @@ public class Aerolinea {
 	
 	
 	// LISTA DE CODIGOS DE VUELOS QUE ESTEN ENTRE UNA FECHA Y SEMANA DESPUES
-	public List<String> consultarVuelosSimilares(String origen, String destino, String fecha) {
-		return null;
+	public List<String> consultarVuelosSimilares(String origen, String destino, String fecha) throws ParseException {
+		List<String> lista = null;
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date fechaFormateada = formato.parse(fecha);
+		
+		for(Map.Entry<Integer, Vuelo> entrada : vuelos.entrySet()) {
+			Integer codigoVuelo = entrada.getKey();
+			Vuelo vuelo = entrada.getValue();
+			
+			if(vuelo.obtenerOrigen().equalsIgnoreCase(origen) && vuelo.obtenerDestino().equalsIgnoreCase(destino)) {
+				if(formato.parse(vuelo.obtenerFecha()).after(fechaFormateada)) {
+					lista.add(" " + codigoVuelo + "");
+				}
+			}
+		} 
+		
+		return lista;
 	}
 	
 	// CANCELACION DE PASAJE DADO EL CODIGO DE PASAJE
-	public void cancelarPasaje(int dni, int codPasaje) {
+	public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
+		
+		Vuelo vueloBuscado = buscarVuelo(codVuelo);;
+		vueloBuscado.cancelarPasaje(dni, nroAsiento);
 		
 	}
 	
+	// CANCELACION DE VUELO
 	public List<String> cancelarVuelo(String codVuelo) {
-		return null;
+		
+		List<String> lista = null;
+		
+		Vuelo vueloBuscado = buscarVuelo(codVuelo);
+		
+		for(Map.Entry<Integer, Cliente> pasajerosVuelo : vueloBuscado.pasajerosVuelo.entrySet()) {
+			lista.add(pasajerosVuelo.getValue().toString() + " " + codVuelo);
+		}
+		
+		return lista;
 	}
 	
 	
@@ -235,7 +265,7 @@ public class Aerolinea {
 		return true;
 	}
 	
-	public Vuelo buscarVuelo(int codVuelo) {
+	public Vuelo buscarVuelo(String codVuelo) {
 		Vuelo vuelo = null;
 		for(int codigo : vuelos.keySet()) {
 			vuelo = vuelos.get(codigo);

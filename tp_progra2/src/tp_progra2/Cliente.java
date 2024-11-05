@@ -13,6 +13,14 @@ public class Cliente {
 		this.telefono = telefono;
 	}
 	
+	public boolean estaDni(int dni) {
+		return this.dni == dni;
+	}
+
+	@Override
+	public String toString() {
+		return "Dni: " + dni + " nombre: " + nombre + " telefono: " + telefono + " \n";
+	}
 	
 	
 	
