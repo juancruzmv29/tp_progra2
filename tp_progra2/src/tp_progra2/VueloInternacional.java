@@ -32,6 +32,9 @@ public class VueloInternacional extends Vuelo{
 		return super.toString();
 	}
 
+	public String obtenerCodigoVueloInternacional() {
+		return this.obtenerCodigoVuelo() + "-PUB";
+	}
 
 
 

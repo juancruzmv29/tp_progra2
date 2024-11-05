@@ -28,7 +28,9 @@ public class VueloPrivado extends Vuelo {
 		super.pasajerosVuelo.put(asiento, c);
 	}
 
-	
+	public String obtenerCodigoVueloPrivado() {
+		return this.obtenerCodigoVuelo() + "-PRI";
+	}
 	
 	@Override
 	public String toString() {

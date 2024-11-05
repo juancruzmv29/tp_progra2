@@ -72,7 +72,8 @@ public abstract class Vuelo {
 		return this.destino;
 	}
 	
-	public int obtenerCodigoVuelo() {
+	
+	public Integer obtenerCodigoVuelo() {
 		return this.codVuelo;
 	}
 	

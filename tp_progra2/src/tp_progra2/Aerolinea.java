@@ -11,7 +11,7 @@ public class Aerolinea {
 	private String nombre;
 	private String cuit;
 	private HashMap<Integer, Cliente> clientes; // dni y objeto cliente
-	private HashMap<Integer, Vuelo> vuelos; // codVuelo y objeto vuelo
+	private HashMap<String, Vuelo> vuelos; // codVuelo y objeto vuelo
 	private HashMap<String, Aeropuerto> aeropuertos; // provincia, aeropuerto
 	private StringBuilder sb;
 	
@@ -58,11 +58,11 @@ public class Aerolinea {
 		
 		
 		VueloNacional vueloNacional = new VueloNacional(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
-		int codVuelo = vueloNacional.obtenerCodigoVuelo();
+		String codVuelo = vueloNacional.obtenerCodigoVueloPublico();
 		
 		vuelos.put(codVuelo, vueloNacional);
 		
-		return codVuelo + "-PUB";
+		return codVuelo;
 	}
 	
 	// REGISTRO DE VUELO INTERNACIONAL
@@ -83,9 +83,9 @@ public class Aerolinea {
 		}
 		
 		VueloInternacional vueloInternacional = new VueloInternacional(origen, destino, fecha, tripulantes, valorRefrigerio, cantRefrigerios, precios, cantAsientos, escalas);
-		Integer codVuelo = vueloInternacional.obtenerCodigoVuelo();
+		String codVuelo = vueloInternacional.obtenerCodigoVueloInternacional();
 		
-		return codVuelo +"-PUB";
+		return codVuelo;
 	}
 	
 	// VENTA DE VUELOS PRIVADOS
@@ -105,9 +105,9 @@ public class Aerolinea {
 		}
 		
 		VueloPrivado vueloPrivado = new VueloPrivado(origen, destino, fecha, tripulantes, dniComprador, acompaniantes);
-		Integer codVuelo = vueloPrivado.obtenerCodigoVuelo();
+		String codVuelo = vueloPrivado.obtenerCodigoVueloPrivado();
 		
-		return codVuelo + "-PRI";
+		return codVuelo;
 	}
 	
 	// ASIENTOS DISPONIBLES DE UN VUELO
@@ -218,8 +218,8 @@ public class Aerolinea {
 		
 		Date fechaFormateada = formato.parse(fecha);
 		
-		for(Map.Entry<Integer, Vuelo> entrada : vuelos.entrySet()) {
-			Integer codigoVuelo = entrada.getKey();
+		for(Map.Entry<String, Vuelo> entrada : vuelos.entrySet()) {
+			String codigoVuelo = entrada.getKey();
 			Vuelo vuelo = entrada.getValue();
 			
 			if(vuelo.obtenerOrigen().equalsIgnoreCase(origen) && vuelo.obtenerDestino().equalsIgnoreCase(destino)) {
@@ -267,7 +267,7 @@ public class Aerolinea {
 	
 	public Vuelo buscarVuelo(String codVuelo) {
 		Vuelo vuelo = null;
-		for(int codigo : vuelos.keySet()) {
+		for(String codigo : vuelos.keySet()) {
 			vuelo = vuelos.get(codigo);
 		}
 		return vuelo;
