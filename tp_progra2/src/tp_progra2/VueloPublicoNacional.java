@@ -3,28 +3,18 @@ package tp_progra2;
 import java.util.Date;
 import java.util.Map.Entry;
 
-public class VueloNacional extends Vuelo {
+public class VueloPublicoNacional extends VueloPublico {
 	
-	private double valorRefrigerio;
-	private double[] precios;
-	public int[] cantAsientos;
+	private int maxPasajerosPorSeccion;
 	
-
-	public VueloNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos) {
-		super(origen, destino, fecha, tripulantes);
-		this.valorRefrigerio = valorRefrigerio;
-		if(this.precios.length <= 1) {
-			this.cantAsientos = cantAsientos;
-		} else {
-			new RuntimeException("Solo se pueden añadir dos precios");
-		}
-		if(this.cantAsientos.length <= 1) {
-			this.cantAsientos = cantAsientos;
-		} else {
-			new RuntimeException("Solo se pueden añadir dos secciones");
-		}
+	
+	public VueloPublicoNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos, 
+			int maxPasajerosPorSeccion) {
+		super(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
+		this.maxPasajerosPorSeccion = maxPasajerosPorSeccion;
 		
 	}
+	
 	
 	
 	@Override

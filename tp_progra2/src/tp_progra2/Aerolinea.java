@@ -42,7 +42,7 @@ public class Aerolinea {
 	
 	// REGISTRO DE VUELO NACIONAL
 	public String registrarVueloPublicoNacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, 
-			double[] precios, int[] cantAsientos) throws ParseException {
+			double[] precios, int[] cantAsientos, int maxPasajerosPorSeccion) throws ParseException {
 		
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -58,7 +58,7 @@ public class Aerolinea {
 		}
 		
 		
-		VueloNacional vueloNacional = new VueloNacional(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
+		VueloPublicoNacional vueloNacional = new VueloPublicoNacional(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos, maxPasajerosPorSeccion);
 		String codVuelo = vueloNacional.obtenerCodigoVueloPublico();
 		
 		vuelos.put(codVuelo, vueloNacional);
@@ -83,7 +83,7 @@ public class Aerolinea {
 			new RuntimeException("La aerolinea por ahora no opera en esta ubicación...");
 		}
 		
-		VueloInternacional vueloInternacional = new VueloInternacional(origen, destino, fecha, tripulantes, valorRefrigerio, cantRefrigerios, precios, cantAsientos, escalas);
+		VueloPublicoInternacional vueloInternacional = new VueloPublicoInternacional(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos, escalas);
 		String codVuelo = vueloInternacional.obtenerCodigoVueloInternacional();
 		
 		return codVuelo;
@@ -113,7 +113,7 @@ public class Aerolinea {
 	
 	// ASIENTOS DISPONIBLES DE UN VUELO
 	public Map<Integer, String> asientosDisponibles(String codVuelo) {
-		Vuelo vuelo = buscarVuelo(codVuelo);
+		VueloPublico vuelo = buscarVuelo(codVuelo);
 		Map<Integer, String> asientosDisponibles = new HashMap<>();
 		String clase = null;
 		
@@ -122,15 +122,15 @@ public class Aerolinea {
 			new RuntimeException("El vuelo buscado no existe... Por favor intente de nuevo");
 		}
 		
-		// Recorre el diccionario donde estan los asientos y los clientes
-		for(Integer nroAsiento : vuelo.pasajerosVuelo.keySet()) {
-			// Si vuelo es una instancia de VueloNacional 
-			if(vuelo instanceof VueloNacional) {
-				VueloNacional vueloNacional = (VueloNacional) vuelo;
-				if(nroAsiento > vueloNacional.cantAsientos[0]) {
-					clase = "Ejecutiva";
-					asientosDisponibles.put(nroAsiento, clase);
-				} else if(nroAsiento > vueloNacional.cantAsientos[1]) {
+		// Recorre los pasajes de un vuelo
+		for(Integer nroAsiento : vuelo.pasajesVuelo.keySet()) {
+			if(vuelo instanceof VueloPublicoNacional) {
+				Pasaje pasaje = vuelo.pasajesVuelo.get(nroAsiento); // obtiene si hay un pasaje en el diccionario dado su numero de asiento
+				if(pasaje == null) {
+					if(nroAsiento > vuelo.cantAsientos[0]) {
+						clase = "Ejecutiva";
+					}
+				} else if(nroAsiento > vuelo.cantAsientos[1]) {
 					clase = "Primera clase";
 					asientosDisponibles.put(nroAsiento, clase);
 				} else {
@@ -139,23 +139,19 @@ public class Aerolinea {
 				}
 			}
 			
-			// Si vuelo es una instancia de VueloInternacional
-			if(vuelo instanceof VueloInternacional) {
-				VueloInternacional vueloInternacional = (VueloInternacional) vuelo;
-				if(nroAsiento > vueloInternacional.cantAsientos[0]) {
-					clase = "Ejecutiva";
-					asientosDisponibles.put(nroAsiento, clase);
-				} else if(nroAsiento > vueloInternacional.cantAsientos[1]) {
+			if(vuelo instanceof VueloPublicoInternacional) {
+				Pasaje pasaje = vuelo.pasajesVuelo.get(nroAsiento);
+				if(pasaje == null) {
+					if(nroAsiento > vuelo.cantAsientos[0]) {
+						clase = "Ejecutiva";
+					}
+				} else if(nroAsiento > vuelo.cantAsientos[1]) {
 					clase = "Primera clase";
 					asientosDisponibles.put(nroAsiento, clase);
 				} else {
 					clase = "Turista";
 					asientosDisponibles.put(nroAsiento, clase);
 				}
-			}
-			// Si vuelo es una instancia de vuelo privado, lanza una excepcion
-			if(vuelo instanceof VueloPrivado) {
-				new RuntimeException("El vuelo es privado... prueba con un vuelo público o privado");
 			}
 		}
 		
@@ -186,27 +182,23 @@ public class Aerolinea {
 		}
 		
 		Pasaje pasaje = new Pasaje(dni, codVuelo, nroAsiento, aOcupar);
+		//pasaje.aniadirPasajeroAlPasaje(cliente);
 		
-		if(vuelo instanceof VueloNacional) {
-			VueloNacional vueloNacional = (VueloNacional) vuelo;
+		if(vuelo instanceof VueloPublicoNacional) {
+			VueloPublicoNacional vueloNacional = (VueloPublicoNacional) vuelo;
 			if(vueloNacional.asientoOcupado(nroAsiento)) {
 				new RuntimeException("El asiento esta ocupado... intente con otro asiento");
 			}
 			vueloNacional.aniadirPasajeroAlVuelo(nroAsiento, cliente);
 		}
 		
-		if(vuelo instanceof VueloInternacional) {
-			VueloInternacional vueloInternacional = (VueloInternacional) vuelo;
+		if(vuelo instanceof VueloPublicoInternacional) {
+			VueloPublicoInternacional vueloInternacional = (VueloPublicoInternacional) vuelo;
 			if(vueloInternacional.asientoOcupado(nroAsiento)) {
 				new RuntimeException("El asiento esta ocupado... intente con otro asiento");
 			}
 			vueloInternacional.aniadirPasajeroAlVuelo(nroAsiento, cliente);
 		}
-		
-		
-		
-		
-		
 		
 		return pasaje.obtenerCodigoPasaje();
 	}
@@ -236,7 +228,7 @@ public class Aerolinea {
 	// CANCELACION DE PASAJE DADO EL CODIGO DE PASAJE
 	public void cancelarPasaje(int dni, String codVuelo, int nroAsiento) {
 		
-		Vuelo vueloBuscado = buscarVuelo(codVuelo);;
+		VueloPublico vueloBuscado = buscarVuelo(codVuelo);;
 		vueloBuscado.cancelarPasaje(dni, nroAsiento);
 		
 	}
@@ -246,10 +238,12 @@ public class Aerolinea {
 		
 		List<String> lista = null;
 		
-		Vuelo vueloBuscado = buscarVuelo(codVuelo);
+		VueloPublico vueloBuscado = buscarVuelo(codVuelo);
 		
-		for(Map.Entry<Integer, Cliente> pasajerosVuelo : vueloBuscado.pasajerosVuelo.entrySet()) {
-			lista.add(pasajerosVuelo.getValue().toString() + " " + codVuelo);
+		for(Map.Entry<Integer, Pasaje> pasajes : vueloBuscado.pasajesVuelo.entrySet()) {
+			Cliente cliente = null;
+			cliente = pasajes.getValue().obtenerCliente();
+			lista.add(cliente.toString() + " -  CANCELADO");
 		}
 		
 		return lista;
@@ -272,13 +266,18 @@ public class Aerolinea {
 	
 	
 	public boolean buscarAeropuerto(String provincia) {
-		return true;
+		for(Entry<String, Aeropuerto> pro : aeropuertos.entrySet()) {
+			if(pro.getKey().equalsIgnoreCase(provincia)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
-	public Vuelo buscarVuelo(String codVuelo) {
-		Vuelo vuelo = null;
+	public VueloPublico buscarVuelo(String codVuelo) {
+		VueloPublico vuelo = null;
 		for(String codigo : vuelos.keySet()) {
-			vuelo = vuelos.get(codigo);
+			vuelo = (VueloPublico) vuelos.get(codigo);
 		}
 		return vuelo;
 	}

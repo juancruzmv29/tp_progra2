@@ -3,29 +3,17 @@ package tp_progra2;
 import java.util.Date;
 import java.util.Map.Entry;
 
-public class VueloInternacional extends Vuelo{
+public class VueloPublicoInternacional extends VueloPublico{
 	
-	private double valorRefrigerio;
-	private int cantRefrigerios;
-	private double precios[];
-	public int cantAsientos[];
+	
 	private String[] escalas;
 	
-
-	
-	public VueloInternacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, int cantRefrigerios, double precios[], 
-			int[] cantAsientos, String[] escalas) {
-		super(origen, destino, fecha, tripulantes);
-		this.valorRefrigerio = valorRefrigerio;
-		this.cantRefrigerios = cantRefrigerios;
-		this.precios = precios;
+	public VueloPublicoInternacional(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos, 
+			String[] escalas) {
+		super(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
 		this.escalas = escalas;
-		if(this.cantAsientos.length <= 3) {
-			this.cantAsientos = cantAsientos;
-		} else {
-			new RuntimeException("Solo se pueden añadir tres secciones");
-		}
 	}
+
 	
 	
 	
