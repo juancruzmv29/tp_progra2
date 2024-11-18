@@ -12,6 +12,9 @@ public class VueloPublicoNacional extends VueloPublico {
 			int maxPasajerosPorSeccion) {
 		super(origen, destino, fecha, tripulantes, valorRefrigerio, precios, cantAsientos);
 		this.maxPasajerosPorSeccion = maxPasajerosPorSeccion;
+		if(cantAsientos[0] > maxPasajerosPorSeccion || cantAsientos[1] > maxPasajerosPorSeccion) {
+			new RuntimeException("La seccion no puede tener más de " + maxPasajerosPorSeccion + " lugares");
+		}
 		
 	}
 	
@@ -26,10 +29,11 @@ public class VueloPublicoNacional extends VueloPublico {
 
 
 
+	/*
 	@Override
 	public void aniadirPasajeroAlVuelo(Integer asiento, Cliente c) {
 		super.pasajerosVuelo.put(asiento, c);
-	}
+	}*/
 
 
 
@@ -44,11 +48,11 @@ public class VueloPublicoNacional extends VueloPublico {
 	@Override
 	public double obtenerValorVuelo() {
 		double monto = 0;
-		for(Entry<Integer, Cliente> pasajeros : this.pasajerosVuelo.entrySet()) {
-			if(pasajeros.getKey() > cantAsientos[0] && pasajeros.getValue() != null) {
+		for(Entry<Integer, Pasaje> pasajes : this.pasajesVuelo.entrySet()) {
+			if(pasajes.getKey() > cantAsientos[0] && pasajes.getValue() != null) {
 				// se calcula el precio de cada pasaje + el 20% de impuestos
 				monto += precios[1] + (precios[1] * 20 / 100);
-			} else if(pasajeros.getKey() < cantAsientos[1] && pasajeros.getValue() != null) {
+			} else if(pasajes.getKey() < cantAsientos[1] && pasajes.getValue() != null) {
 				monto += precios[0] + (precios[0] * 20 / 100) ;
 			}
 		}

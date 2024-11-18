@@ -25,13 +25,20 @@ public class VueloPrivado extends Vuelo {
 	}
 
 
+	public void agregarComprador(Cliente c, int dniComprador) {
+		clienteComprador.put(dniComprador, c);
+	}
+	
+	public void agregarAcompaniantes(HashMap<Integer, Cliente> acompaniantes) {
+		this.acompaniantes = acompaniantes;
+	}
 
 
-
+	/*
 	@Override
 	public void aniadirPasajeroAlVuelo(Integer asiento, Cliente c) {
 		super.pasajerosVuelo.put(asiento, c);
-	}
+	}*/
 
 	public String obtenerCodigoVueloPrivado() {
 		return this.obtenerCodigoVuelo() + "-PRI";
@@ -63,7 +70,7 @@ public class VueloPrivado extends Vuelo {
 			monto = precio + (precio * 30 / 100);
 		}
 		
-		return monto ;
+		return monto;
 	}
 
 

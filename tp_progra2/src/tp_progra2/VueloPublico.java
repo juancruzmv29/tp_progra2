@@ -6,8 +6,8 @@ import java.util.Map;
 public abstract class VueloPublico extends Vuelo{
 	
 	public HashMap<Integer, Pasaje> pasajesVuelo; // nroAsiento, Pasaje
-	private double valorRefrigerio;
-	private double[] precios;
+	public double valorRefrigerio;
+	public double[] precios;
 	public int[] cantAsientos;
 
 	public VueloPublico(String origen, String destino, String fecha, int tripulantes, double valorRefrigerio, double[] precios, int[] cantAsientos) {

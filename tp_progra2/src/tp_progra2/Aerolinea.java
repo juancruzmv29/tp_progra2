@@ -93,6 +93,7 @@ public class Aerolinea {
 	public String VenderVueloPrivado(String origen, String destino, String fecha, int tripulantes, double precio,  int dniComprador, int[] acompaniantes) throws ParseException {
 		
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		Cliente clienteComprador = buscarCliente(dniComprador);
 		
 		Date fechaFormateada = formato.parse(fecha);
 		Date fechaHoy = new Date();
@@ -106,6 +107,7 @@ public class Aerolinea {
 		}
 		
 		VueloPrivado vueloPrivado = new VueloPrivado(origen, destino, fecha, tripulantes, precio, dniComprador, acompaniantes);
+		vueloPrivado.agregarComprador(clienteComprador, dniComprador);
 		String codVuelo = vueloPrivado.obtenerCodigoVueloPrivado();
 		
 		return codVuelo;
@@ -263,7 +265,15 @@ public class Aerolinea {
 		return recaudado;
 	}
 	
-	
+	public Cliente buscarCliente(int dni) {
+		Cliente cliente = null;
+		if(clientes.get(dni) != null) {
+			cliente = clientes.get(dni);
+		} else {
+			new RuntimeException("El cliente no se encuentra en la lista... Registrese primero");
+		}
+		return cliente;
+	}
 	
 	public boolean buscarAeropuerto(String provincia) {
 		for(Entry<String, Aeropuerto> pro : aeropuertos.entrySet()) {
