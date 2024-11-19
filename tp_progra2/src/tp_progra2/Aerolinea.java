@@ -254,17 +254,20 @@ public class Aerolinea {
 	// RECORRE LOS VUELOS DE AEROLINEA POR DESTINO Y DEVUELVE UN RECAUDO DE DINERO
 	public double totalRecaudado(String destino) {
 		
-		double recaudado = 0;
-		
-		for(Entry<String, Vuelo> vuelos : vuelos.entrySet()) {
-			if(vuelos.getValue().obtenerDestino().equalsIgnoreCase(destino)) {
-				recaudado += vuelos.getValue().obtenerValorVuelo();
-			}
-		}
-		
-		return recaudado;
+		return recorrerVuelos(destino);
 	}
 	
+	private double recorrerVuelos(String destino) {
+		double total = 0;
+		for(Entry<String, Vuelo> vuelos : vuelos.entrySet()) {
+			if(vuelos.getValue().obtenerDestino().equalsIgnoreCase(destino)) {
+				total += vuelos.getValue().obtenerValorVuelo();
+			}
+		}
+		return total;
+	}
+	
+	// Busca un cliente y lo obtiene
 	public Cliente buscarCliente(int dni) {
 		Cliente cliente = null;
 		if(clientes.get(dni) != null) {
@@ -275,6 +278,7 @@ public class Aerolinea {
 		return cliente;
 	}
 	
+	// Busca un aeropuerto por provincia y si esta lanza verdadero
 	public boolean buscarAeropuerto(String provincia) {
 		for(Entry<String, Aeropuerto> pro : aeropuertos.entrySet()) {
 			if(pro.getKey().equalsIgnoreCase(provincia)) {
@@ -284,6 +288,7 @@ public class Aerolinea {
 		return false;
 	}
 	
+	// Busca un vuelo publico y si esta lo obtiene
 	public VueloPublico buscarVuelo(String codVuelo) {
 		VueloPublico vuelo = null;
 		for(String codigo : vuelos.keySet()) {
